@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Salary Check Blueprint</title>
+<style>
+  :root {
+    --gold: #d4a017; --gold-soft: #f6e7b0; --red: #c0392b; --green: #2e8b57;
+    --blue: #1f3a8a; --ink: #2a2118; --paper: #fffaf0; --card: #ffffff; --muted: #6b5d4b; --line: #eadfc4;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --ink: #f5ecd9; --paper: #17130d; --card: #241d14; --muted: #c2b297; --gold-soft: #3a2e12; --line: #3d3220; }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: system-ui, -apple-system, "Segoe UI", sans-serif; color: var(--ink); background: var(--paper); line-height: 1.55;
+    background-image: radial-gradient(circle at 10% 10%, rgba(212,160,23,.16) 0 6px, transparent 7px), radial-gradient(circle at 60% 40%, rgba(31,58,138,.1) 0 5px, transparent 6px);
+    background-size: 46px 46px, 62px 62px; }
+  .wrap { max-width: 940px; margin: 0 auto; padding: 32px 16px 64px; }
+  h1, h2 { font-family: Georgia, "Times New Roman", serif; }
+  header { background: linear-gradient(135deg, var(--gold), #e8c547 40%, var(--red) 75%, var(--blue)); color: #fff; border-radius: 18px; padding: 28px; box-shadow: 0 8px 24px rgba(0,0,0,.18); }
+  header h1 { margin: 0 0 6px; font-size: 2rem; } header p { margin: 0; }
+  .badge { display: inline-block; background: rgba(0,0,0,.25); padding: 2px 10px; border-radius: 999px; font-size: .85rem; margin-bottom: 10px; }
+  section { background: var(--card); border-radius: 14px; padding: 20px 22px; margin-top: 20px; border-left: 6px solid var(--gold); box-shadow: 0 2px 10px rgba(0,0,0,.06); }
+  h2 { margin: 0 0 10px; font-size: 1.3rem; }
+  svg { width: 100%; height: auto; display: block; }
+  svg text { font-family: system-ui, sans-serif; }
+  .piece { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  @media (max-width: 640px) { .piece { grid-template-columns: 1fr; } }
+  .piece div { border-radius: 12px; padding: 12px; color: #fff; }
+  .piece b { display: block; font-size: 1.05rem; }
+  .steps { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; }
+  .steps button { border: 2px solid var(--gold); background: var(--card); color: var(--ink); border-radius: 999px; padding: 6px 12px; cursor: pointer; font: inherit; font-size: .9rem; }
+  .steps button.active { background: var(--gold); color: #fff; }
+  .flow { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 10px 0; }
+  .chip { border-radius: 8px; padding: 4px 10px; font-family: ui-monospace, Consolas, monospace; font-size: .85rem; color: #fff; }
+  .chip.you { background: #6b4f9e; } .chip.html { background: #d4a017; } .chip.app { background: #2e8b57; } .chip.calc { background: #c0392b; } .chip.store { background: #1f3a8a; }
+  .arrow { color: var(--gold); font-weight: bold; }
+  details { border-radius: 10px; margin: 8px 0; padding: 10px 14px; background: var(--paper); border: 2px solid var(--line); }
+  details summary { cursor: pointer; font-weight: 700; }
+  details .ref { font-size: .85rem; color: var(--muted); }
+  table { border-collapse: collapse; width: 100%; font-size: .92rem; }
+  th, td { text-align: left; padding: 8px; border-bottom: 1px solid var(--line); }
+  pre { background: var(--paper); border: 1px solid var(--line); border-radius: 10px; padding: 12px; overflow-x: auto; font-size: .85rem; }
+  .formula { background: var(--gold-soft); border-radius: 10px; padding: 12px 14px; }
+  .muted { color: var(--muted); }
+  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; } @media (max-width: 640px) { .cols { grid-template-columns: 1fr; } }
+  .box { border-radius: 10px; padding: 12px 14px; background: var(--paper); border: 2px solid var(--line); }
+  footer { margin-top: 28px; font-size: .9rem; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="badge">Spec · approved</div>
+    <h1>Salary Check: Technical Blueprint</h1>
+    <p>How we'll build it: a phone-friendly web app that saves your details on the phone, published free with GitHub Pages.</p>
+  </header>
+
+  <section>
+    <h2>How it works, in plain language</h2>
+    <div class="piece">
+      <div style="background:var(--gold)"><b>HTML: the structure</b>The boxes, dropdowns, buttons, and headings.</div>
+      <div style="background:var(--blue)"><b>CSS: the style</b>Klimt golds, reds, greens, and starry blues, plus decorative headings.</div>
+      <div style="background:var(--red)"><b>JavaScript: the brains</b>Adds up purchases, works out your pace, and decides when to turn red.</div>
+    </div>
+    <p>Your details are saved in <b>local storage</b>, a sticky note the phone's browser keeps just for this app. Nothing goes to the internet, and there are no accounts or passwords.</p>
+  </section>
+
+  <section>
+    <h2>The big picture</h2>
+    <svg viewBox="0 0 800 300" role="img" aria-label="Diagram: on your computer, the project files are tested and pushed to GitHub. GitHub Pages serves the page to your phone. On the phone, the page saves to and reads from local storage.">
+      <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#d4a017"/></marker></defs>
+      <rect x="10" y="20" width="230" height="200" rx="16" fill="none" stroke="#d4a017" stroke-width="3" stroke-dasharray="6 5"/>
+      <text x="125" y="45" text-anchor="middle" font-size="14" font-weight="bold" fill="currentColor">💻 Your computer (build)</text>
+      <rect x="35" y="65" width="180" height="40" rx="10" fill="#d4a017"/><text x="125" y="90" text-anchor="middle" font-size="13" fill="#fff">index.html · styles.css</text>
+      <rect x="35" y="115" width="180" height="40" rx="10" fill="#c0392b"/><text x="125" y="140" text-anchor="middle" font-size="13" fill="#fff">calc.js · app.js</text>
+      <rect x="35" y="165" width="180" height="40" rx="10" fill="#6b4f9e"/><text x="125" y="190" text-anchor="middle" font-size="13" fill="#fff">node --test ✔ checks maths</text>
+      <rect x="300" y="80" width="190" height="80" rx="16" fill="#2a2118"/>
+      <text x="395" y="112" text-anchor="middle" font-size="14" font-weight="bold" fill="#fff">GitHub</text>
+      <text x="395" y="135" text-anchor="middle" font-size="12" fill="#e8c547">public repo + free Pages link</text>
+      <line x1="242" y1="120" x2="296" y2="120" stroke="#d4a017" stroke-width="3" marker-end="url(#a)"/>
+      <text x="269" y="110" text-anchor="middle" font-size="11" fill="currentColor">push</text>
+      <rect x="550" y="20" width="230" height="260" rx="28" fill="none" stroke="#1f3a8a" stroke-width="4"/>
+      <text x="665" y="50" text-anchor="middle" font-size="14" font-weight="bold" fill="currentColor">📱 Your phone</text>
+      <rect x="575" y="70" width="180" height="70" rx="10" fill="#2e8b57"/>
+      <text x="665" y="100" text-anchor="middle" font-size="13" fill="#fff">Salary Check page</text>
+      <text x="665" y="120" text-anchor="middle" font-size="11" fill="#fff">(home-screen icon)</text>
+      <rect x="575" y="190" width="180" height="60" rx="10" fill="#1f3a8a"/>
+      <text x="665" y="216" text-anchor="middle" font-size="13" fill="#fff">Local storage</text>
+      <text x="665" y="235" text-anchor="middle" font-size="11" fill="#e8c547">salaryCheck.v1</text>
+      <line x1="492" y1="120" x2="571" y2="105" stroke="#d4a017" stroke-width="3" marker-end="url(#a)"/>
+      <text x="530" y="98" text-anchor="middle" font-size="11" fill="currentColor">opens link</text>
+      <line x1="645" y1="142" x2="645" y2="186" stroke="#d4a017" stroke-width="3" marker-end="url(#a)"/>
+      <line x1="690" y1="188" x2="690" y2="144" stroke="#d4a017" stroke-width="3" marker-end="url(#a)"/>
+      <text x="612" y="170" text-anchor="middle" font-size="11" fill="currentColor">save</text>
+      <text x="722" y="170" text-anchor="middle" font-size="11" fill="currentColor">load</text>
+    </svg>
+  </section>
+
+  <section>
+    <h2>Follow your journey through the files</h2>
+    <p class="muted">Pick a step to see which files do the work.</p>
+    <div class="steps" id="steps"></div>
+    <div id="stepBody"></div>
+  </section>
+
+  <section>
+    <h2>The salary warning maths (calc.js)</h2>
+    <div class="formula">
+      <b>Left</b> = salary − debit orders − purchases<br>
+      <b>Pace per day</b> = purchases ÷ days since last salary (or last Reset)<br>
+      <b>Needed</b> = pace × days until salary (rounded to R50)<br>
+      <b style="color:var(--red)">Running low</b> if left &lt; needed, otherwise <b style="color:var(--green)">on track</b>
+    </div>
+    <p><b>Example:</b> salary R20,000, debit orders R6,000, purchases R13,500 over 16 days, 14 days to go.<br>
+    Left = <b>R500</b>. Pace ≈ R844/day. Needed ≈ <b>R11,800</b>. So it's red: <i>"Running low: R500 left, 14 days until salary. At your pace you need about R11,800."</i></p>
+    <p class="muted">Before your first Reset, "days since last salary" counts back one month (or week) from your salary date, so setting up mid-month still works.</p>
+  </section>
+
+  <section>
+    <h2>Every piece and the PRD part it serves</h2>
+    <details><summary>Salary section</summary>Amount, monthly/weekly, salary date. Saves on every change.<div class="ref">index.html + app.js · prd.md › Salary and Salary Date</div></details>
+    <details><summary>Debit orders section</summary>Five rows: name, amount, monthly/weekly. Kept by Reset.<div class="ref">index.html + app.js + calc.js › debitTotal · prd.md › Debit Orders</div></details>
+    <details><summary>Status card</summary>Spent, left, days to salary, plus one message: set up · add purchases · on track · running low · salary day reminder.<div class="ref">app.js + calc.js › summary · prd.md › The Salary Warning, States and Boundaries</div></details>
+    <details><summary>Add a purchase row</summary>Amount + category (Groceries, Electricity, Fuel, Clothing, Other) + Add. Friendly note for bad amounts.<div class="ref">index.html + app.js · prd.md › Adding a Purchase</div></details>
+    <details><summary>Purchases list</summary>Newest first, ✕ to delete, totals per category.<div class="ref">app.js · prd.md › Adding a Purchase, Product Decisions</div></details>
+    <details><summary>Reset</summary>"Are you sure?" → clears purchases, starts the count today, and suggests the next salary date.<div class="ref">app.js + calc.js › nextSalaryDate · prd.md › Reset and Reminder</div></details>
+    <details><summary>Saving (local storage)</summary>One sticky note called <code>salaryCheck.v1</code>. If it's blocked, the app still works and shows a small note.<div class="ref">app.js › load/save · prd.md › States and Boundaries</div></details>
+    <details><summary>Add to Home Screen</summary>Name, icon, and colours so it feels like an app.<div class="ref">manifest.webmanifest + icon.svg</div></details>
+  </section>
+
+  <section>
+    <h2>What's saved, and what happens when you come back</h2>
+    <table>
+      <tr><th>Data</th><th>Changes when</th><th>After closing the app</th></tr>
+      <tr><td>Salary, frequency, date</td><td>You change it</td><td>Still there</td></tr>
+      <tr><td>Debit orders</td><td>You change them</td><td>Still there, kept by Reset</td></tr>
+      <tr><td>Purchases</td><td>Add / ✕ delete</td><td>Still there until Reset</td></tr>
+      <tr><td>Cycle start</td><td>Reset</td><td>Still there</td></tr>
+    </table>
+  </section>
+
+  <section>
+    <h2>Where everything lives</h2>
+<pre>learn-ai-project/
+├── index.html             # the single screen (structure)
+├── styles.css             # Klimt colours, decorative headings, phone layout
+├── calc.js                # money maths: left, pace, needed, status, rand format
+├── app.js                 # screen logic: inputs, save/load, status, list
+├── manifest.webmanifest   # name/icon for "Add to Home Screen"
+├── icon.svg               # gold mosaic app icon
+├── tests/calc.test.js     # automatic maths checks (node --test)
+├── README.md              # how to open it and put it on a phone
+└── devpost/               # your planning docs</pre>
+  </section>
+
+  <section>
+    <div class="cols">
+      <div class="box"><h3 style="margin-top:0">If things go wrong</h3><ul>
+        <li><b>Storage blocked</b> (private mode): the app still works, with a note that details won't be saved</li>
+        <li><b>Bad amount:</b> "Please enter an amount in rands, like 450."</li>
+        <li><b>Salary date today or past:</b> the reset reminder shows</li></ul></div>
+      <div class="box"><h3 style="margin-top:0">Kept simple on purpose</h3><ul>
+        <li>Web app, not an app-store app (no fees or approval)</li>
+        <li>Phone storage, not online accounts</li>
+        <li>Fixed five debit-order rows</li>
+        <li>Simple overall pace, not per-category forecasting</li></ul></div>
+    </div>
+  </section>
+
+  <footer class="muted">Companion page for <code>devpost/spec.md</code>. The Markdown file is the official version.</footer>
+</div>
+<script>
+  const S = [
+    ["First open", [["you","You open the link"],["html","index.html"],["app","app.js load()"],["store","local storage: empty"]], "Nothing saved yet, so you see blank boxes with R signs, and the status asks for your salary and date."],
+    ["Set up", [["you","Type salary + date + debit orders"],["app","app.js save()"],["store","local storage"],["calc","calc.js summary()"]], "Each change is saved instantly, then the maths reruns and the status updates."],
+    ["Add purchase", [["you","R600 · Fuel · Add"],["app","app.js checks the amount"],["store","saved"],["calc","calc.js summary()"]], "Bad amounts get a friendly note. Good ones join the list and the totals."],
+    ["See the answer", [["calc","left · pace · needed"],["app","app.js draws status"],["html","red or green card"]], "If what's left won't cover your pace until salary day, the card turns red with a plain message."],
+    ["Come back", [["you","Open the app again"],["app","app.js load()"],["store","reads salaryCheck.v1"],["html","everything redrawn"]], "Salary, date, debit orders, and purchases are all back where you left them."],
+    ["New month", [["calc","days left ≤ 0"],["html","reminder shows"],["you","tap Reset → Are you sure?"],["app","clear purchases, cycle starts today"],["calc","nextSalaryDate()"]], "It never resets by itself. You press Reset when the salary actually lands."]
+  ];
+  const stepsEl = document.getElementById("steps"), body = document.getElementById("stepBody");
+  S.forEach((s, i) => { const b = document.createElement("button"); b.textContent = (i+1) + ". " + s[0]; b.onclick = () => show(i); stepsEl.appendChild(b); });
+  function show(i) {
+    [...stepsEl.children].forEach((b, j) => b.classList.toggle("active", i === j));
+    const chips = S[i][1].map(c => '<span class="chip ' + c[0] + '">' + c[1] + '</span>').join('<span class="arrow">→</span>');
+    body.innerHTML = '<div class="flow">' + chips + '</div><p>' + S[i][2] + '</p>';
+  }
+  show(0);
+</script>
+</body>
+</html>

@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Salary Check</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="app">
+    <header class="masthead">
+      <h1>Salary Check</h1>
+      <p class="tagline">Will my money last until my next salary?</p>
+    </header>
+
+    <section class="card" aria-labelledby="salary-heading">
+      <h2 id="salary-heading">Salary</h2>
+      <div class="salary-row">
+        <label class="field">
+          <span class="label">Amount</span>
+          <span class="rand-input"><span aria-hidden="true">R</span><input id="salary-amount" type="text" inputmode="decimal" autocomplete="off"></span>
+        </label>
+        <label class="field">
+          <span class="label">Next date</span>
+          <input id="salary-date" type="text" inputmode="numeric" placeholder="dd/mm" autocomplete="off" maxlength="5">
+        </label>
+        <label class="field">
+          <span class="label">Paid</span>
+          <select id="salary-frequency">
+            <option value="monthly">Monthly</option>
+            <option value="weekly">Weekly</option>
+          </select>
+        </label>
+      </div>
+      <p class="note" id="date-note" hidden>Please type the date as day/month, like 25/10.</p>
+    </section>
+
+    <section class="card status" id="status" aria-live="polite" aria-labelledby="status-heading">
+      <h2 id="status-heading">Status</h2>
+      <dl class="figures">
+        <div><dt>Spent</dt><dd id="status-spent">R0</dd></div>
+        <div><dt>Left</dt><dd id="status-left">R0</dd></div>
+        <div><dt>Days to salary</dt><dd id="status-days">–</dd></div>
+      </dl>
+      <p class="message" id="status-message">Enter your salary and salary date first.</p>
+    </section>
+
+    <section class="card" aria-labelledby="add-heading">
+      <h2 id="add-heading">Add a purchase</h2>
+      <form id="add-form" class="add-row" novalidate>
+        <span class="rand-input"><span aria-hidden="true">R</span><input id="purchase-amount" type="text" inputmode="decimal" autocomplete="off" aria-label="Amount in rands"></span>
+        <select id="purchase-category" aria-label="Category">
+          <option value="groceries">Groceries</option>
+          <option value="electricity">Electricity</option>
+          <option value="fuel">Fuel</option>
+          <option value="clothing">Clothing</option>
+          <option value="other">Other</option>
+        </select>
+        <button type="submit">Add</button>
+        <input id="purchase-other" class="other-name" type="text" autocomplete="off" maxlength="30" placeholder="What was it? e.g. haircut" aria-label="What the other purchase was" hidden>
+      </form>
+      <p class="note" id="add-note" hidden>Please enter an amount in rands, like 450.</p>
+    </section>
+
+    <section class="card" aria-labelledby="list-heading">
+      <h2 id="list-heading">This month's purchases</h2>
+      <ul class="purchases" id="purchase-list"></ul>
+      <p class="empty" id="purchase-empty">No purchases yet.</p>
+    </section>
+  </main>
+
+  <script src="calc.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Salary Check Scope</title>
+<style>
+  :root {
+    --gold: #d4a017; --gold-soft: #f6e7b0; --red: #c0392b; --green: #2e8b57;
+    --blue: #1f3a8a; --ink: #2a2118; --paper: #fffaf0; --card: #ffffff; --muted: #6b5d4b;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --ink: #f5ecd9; --paper: #17130d; --card: #241d14; --muted: #c2b297; --gold-soft: #3a2e12; }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; font-family: Georgia, "Times New Roman", serif; color: var(--ink); background: var(--paper);
+    background-image: radial-gradient(circle at 10% 10%, rgba(212,160,23,.18) 0 6px, transparent 7px),
+                      radial-gradient(circle at 60% 40%, rgba(31,58,138,.12) 0 5px, transparent 6px);
+    background-size: 46px 46px, 62px 62px; line-height: 1.55;
+  }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 32px 16px 64px; }
+  header {
+    background: linear-gradient(135deg, var(--gold), #e8c547 40%, var(--red) 75%, var(--blue));
+    color: #fff; border-radius: 18px; padding: 28px; box-shadow: 0 8px 24px rgba(0,0,0,.18);
+  }
+  header h1 { margin: 0 0 6px; font-size: 2rem; }
+  header p { margin: 0; font-size: 1.1rem; }
+  .badge { display: inline-block; background: rgba(0,0,0,.25); padding: 2px 10px; border-radius: 999px; font-size: .85rem; margin-bottom: 10px; font-family: system-ui, sans-serif; }
+  section { background: var(--card); border-radius: 14px; padding: 20px 22px; margin-top: 20px; border-left: 6px solid var(--gold); box-shadow: 0 2px 10px rgba(0,0,0,.06); }
+  section.kernel { border-left-color: var(--red); background: linear-gradient(90deg, var(--gold-soft), var(--card)); }
+  h2 { margin: 0 0 10px; font-size: 1.3rem; }
+  .question { font-size: 1.4rem; font-weight: bold; color: var(--red); }
+  svg { width: 100%; height: auto; display: block; }
+  svg text { font-family: system-ui, sans-serif; }
+  details { border-radius: 10px; margin: 10px 0; padding: 10px 14px; background: var(--paper); }
+  details summary { cursor: pointer; font-weight: bold; font-family: system-ui, sans-serif; }
+  details.now { border: 2px solid var(--green); }
+  details.later { border: 2px solid var(--blue); }
+  details.cut { border: 2px solid var(--red); }
+  ul { margin: 8px 0 0; padding-left: 20px; }
+  .muted { color: var(--muted); }
+  .swatches { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+  .swatches span { width: 44px; height: 44px; border-radius: 50%; border: 3px solid var(--card); box-shadow: 0 1px 4px rgba(0,0,0,.25); }
+  .open { border-left-color: var(--blue); }
+  footer { margin-top: 28px; font-size: .9rem; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="badge">Scope · approved</div>
+    <h1>Salary Check <span style="font-size:1rem;opacity:.85">(working name)</span></h1>
+    <p>A colourful little budgeting app that tells you whether your money will last until your next salary.</p>
+  </header>
+
+  <section class="kernel">
+    <h2>The heart of the idea</h2>
+    <p class="question">"Will my money last until the next salary?"</p>
+    <p>Most budgeting apps ask "did you go over your grocery limit?" This one compares <b>money left</b> with <b>days left</b> until the next salary. If it's two weeks after salary day and the cash is nearly gone, it turns <b style="color:var(--red)">red</b>.</p>
+  </section>
+
+  <section>
+    <h2>How it works: the core loop</h2>
+    <svg viewBox="0 0 760 300" role="img" aria-label="Diagram: You set up salary, pay date and debit orders once, then type each purchase, then the app shows spent, left and days to the next salary with a red or OK status, and you come back with every purchase.">
+      <defs>
+        <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#d4a017"/></marker>
+      </defs>
+      <!-- person -->
+      <circle cx="70" cy="70" r="22" fill="#1f3a8a"/>
+      <rect x="45" y="96" width="50" height="40" rx="14" fill="#1f3a8a"/>
+      <text x="70" y="160" text-anchor="middle" font-size="14" fill="currentColor">You</text>
+      <!-- step 1 -->
+      <rect x="140" y="40" width="170" height="90" rx="14" fill="#d4a017"/>
+      <text x="225" y="70" text-anchor="middle" font-size="14" font-weight="bold" fill="#fff">1. Set up once</text>
+      <text x="225" y="92" text-anchor="middle" font-size="12" fill="#fff">Salary + pay date</text>
+      <text x="225" y="110" text-anchor="middle" font-size="12" fill="#fff">~5 debit orders</text>
+      <!-- step 2 -->
+      <rect x="350" y="40" width="170" height="90" rx="14" fill="#2e8b57"/>
+      <text x="435" y="70" text-anchor="middle" font-size="14" font-weight="bold" fill="#fff">2. Type purchases</text>
+      <text x="435" y="92" text-anchor="middle" font-size="12" fill="#fff">e.g. R450 · groceries</text>
+      <text x="435" y="110" text-anchor="middle" font-size="12" fill="#fff">fuel · electricity</text>
+      <!-- step 3 -->
+      <rect x="560" y="40" width="180" height="90" rx="14" fill="#1f3a8a"/>
+      <text x="650" y="70" text-anchor="middle" font-size="14" font-weight="bold" fill="#fff">3. See the answer</text>
+      <text x="650" y="92" text-anchor="middle" font-size="12" fill="#fff">Spent · Left</text>
+      <text x="650" y="110" text-anchor="middle" font-size="12" fill="#fff">Days to next salary</text>
+      <!-- arrows -->
+      <line x1="100" y1="85" x2="136" y2="85" stroke="#d4a017" stroke-width="3" marker-end="url(#arr)"/>
+      <line x1="312" y1="85" x2="346" y2="85" stroke="#d4a017" stroke-width="3" marker-end="url(#arr)"/>
+      <line x1="522" y1="85" x2="556" y2="85" stroke="#d4a017" stroke-width="3" marker-end="url(#arr)"/>
+      <!-- outcomes -->
+      <rect x="560" y="170" width="85" height="50" rx="12" fill="#c0392b"/>
+      <text x="602" y="200" text-anchor="middle" font-size="13" font-weight="bold" fill="#fff">Red</text>
+      <rect x="655" y="170" width="85" height="50" rx="12" fill="#2e8b57"/>
+      <text x="697" y="200" text-anchor="middle" font-size="13" font-weight="bold" fill="#fff">On track</text>
+      <line x1="650" y1="132" x2="650" y2="166" stroke="#d4a017" stroke-width="3" marker-end="url(#arr)"/>
+      <!-- loop back -->
+      <path d="M560 245 C 450 290, 480 290, 435 135" fill="none" stroke="#d4a017" stroke-width="3" stroke-dasharray="7 6" marker-end="url(#arr)"/>
+      <text x="470" y="280" text-anchor="middle" font-size="12" fill="currentColor">every purchase changes the answer, so you come back</text>
+    </svg>
+  </section>
+
+  <section>
+    <h2>Who it's for</h2>
+    <p><b>You first:</b> someone in South Africa whose salary gets "stretched thin" across debit orders, groceries, electricity and fuel.</p>
+    <p><b>Then family and friends:</b> like the two friends whose cars broke down, who'd benefit from "knowing exactly where your money is and where you can cut costs."</p>
+  </section>
+
+  <section>
+    <h2>What "working" looks like (the 1-minute demo)</h2>
+    <p>One screen: pay date and salary at the top, fixed debit orders listed, expenses entered at the bottom. It shows what's spent, what's left, and the days until the next salary.</p>
+    <p><b>The "oh, that's useful" moment:</b> add one more purchase, and the status turns <b style="color:var(--red)">red</b> because the money won't last until the next salary.</p>
+  </section>
+
+  <section>
+    <h2>What's in, what's later, what's cut</h2>
+    <p class="muted">Click each one to open it.</p>
+    <details class="now" open>
+      <summary>Now: the proof of concept</summary>
+      <ul>
+        <li>Enter salary and pay date</li>
+        <li>Enter fixed monthly debit orders (around five)</li>
+        <li>Type in purchases: amount + category (groceries, electricity, fuel)</li>
+        <li>Show total spent, money left, days until the next salary</li>
+        <li>Red warning when money runs out faster than the days</li>
+        <li>Rand (R) currency, Klimt-inspired vibrant colours</li>
+      </ul>
+    </details>
+    <details class="later">
+      <summary>Later: worth doing, just not now</summary>
+      <ul>
+        <li>Photograph receipts so the app reads them and categorises spending</li>
+        <li>Spot junk food and sweets, and suggest where you could have saved</li>
+        <li>3-month comparison, with green when you spend less than last month</li>
+        <li>Sharing the app with family and friends</li>
+      </ul>
+    </details>
+    <details class="cut">
+      <summary>Cut: with reasons</summary>
+      <ul>
+        <li><b>Receipt scanning (for now):</b> needs an AI image service, an account and secret key, and maybe a cost per scan. It would use up the 2–4 hours before the salary warning works.</li>
+        <li><b>South African store price comparisons:</b> need live price data from stores, which is far beyond a proof of concept.</li>
+      </ul>
+    </details>
+  </section>
+
+  <section>
+    <h2>Look and feel</h2>
+    <p>Inspired by <b>Gustav Klimt</b>, especially <a href="https://en.wikipedia.org/wiki/The_Kiss_(Klimt)">The Kiss</a>: bright golds and yellows, reds, greens and starry blues. Numbers in South African rand, with clear highlighting.</p>
+    <div class="swatches" aria-label="Colour palette">
+      <span style="background:#d4a017" title="Gold"></span>
+      <span style="background:#e8c547" title="Yellow"></span>
+      <span style="background:#c0392b" title="Red"></span>
+      <span style="background:#2e8b57" title="Green"></span>
+      <span style="background:#1f3a8a" title="Starry blue"></span>
+    </div>
+  </section>
+
+
+  <footer class="muted">Companion page for <code>devpost/scope.md</code>. The Markdown file is the official version.</footer>
+</div>
+</body>
+</html>

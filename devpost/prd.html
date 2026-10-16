@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Salary Check PRD</title>
+<style>
+  :root {
+    --gold: #d4a017; --gold-soft: #f6e7b0; --red: #c0392b; --green: #2e8b57;
+    --blue: #1f3a8a; --ink: #2a2118; --paper: #fffaf0; --card: #ffffff; --muted: #6b5d4b; --line: #eadfc4;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --ink: #f5ecd9; --paper: #17130d; --card: #241d14; --muted: #c2b297; --gold-soft: #3a2e12; --line: #3d3220; }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; font-family: system-ui, -apple-system, "Segoe UI", sans-serif; color: var(--ink); background: var(--paper); line-height: 1.55;
+    background-image: radial-gradient(circle at 10% 10%, rgba(212,160,23,.16) 0 6px, transparent 7px),
+                      radial-gradient(circle at 60% 40%, rgba(31,58,138,.1) 0 5px, transparent 6px);
+    background-size: 46px 46px, 62px 62px;
+  }
+  .wrap { max-width: 920px; margin: 0 auto; padding: 32px 16px 64px; }
+  h1, h2 { font-family: Georgia, "Times New Roman", serif; }
+  header { background: linear-gradient(135deg, var(--gold), #e8c547 40%, var(--red) 75%, var(--blue)); color: #fff; border-radius: 18px; padding: 28px; box-shadow: 0 8px 24px rgba(0,0,0,.18); }
+  header h1 { margin: 0 0 6px; font-size: 2rem; }
+  header p { margin: 0; }
+  .badge { display: inline-block; background: rgba(0,0,0,.25); padding: 2px 10px; border-radius: 999px; font-size: .85rem; margin-bottom: 10px; }
+  section { background: var(--card); border-radius: 14px; padding: 20px 22px; margin-top: 20px; border-left: 6px solid var(--gold); box-shadow: 0 2px 10px rgba(0,0,0,.06); }
+  section.kernel { border-left-color: var(--red); }
+  h2 { margin: 0 0 10px; font-size: 1.3rem; }
+  .grow { background: var(--gold-soft); border-radius: 10px; padding: 10px 14px; margin: 10px 0; font-size: .95rem; }
+  .journey { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; margin: 14px 0; }
+  .journey button { border: 0; border-radius: 12px; padding: 10px 6px; cursor: pointer; font: inherit; font-size: .85rem; font-weight: 600; color: #fff; opacity: .55; transition: opacity .15s, transform .15s; }
+  .journey button.active { opacity: 1; transform: translateY(-3px); box-shadow: 0 4px 10px rgba(0,0,0,.2); }
+  @media (max-width: 640px) { .journey { grid-template-columns: repeat(3, 1fr); } }
+  .stage { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; align-items: start; }
+  @media (max-width: 720px) { .stage { grid-template-columns: 1fr; } }
+  .phone { border: 3px solid var(--gold); border-radius: 22px; padding: 14px; background: var(--paper); font-size: .82rem; }
+  .phone .blk { border: 1px dashed var(--line); border-radius: 10px; padding: 8px 10px; margin-bottom: 8px; transition: all .2s; }
+  .phone .blk.hl { border: 2px solid var(--gold); background: var(--gold-soft); }
+  .phone .title { font-family: Georgia, serif; font-size: 1.15rem; font-weight: bold; text-align: center; color: var(--gold); letter-spacing: .04em; border-bottom: 3px double var(--gold); padding-bottom: 4px; margin-bottom: 10px; }
+  .phone .lbl { font-weight: 700; color: var(--blue); }
+  @media (prefers-color-scheme: dark) { .phone .lbl { color: #8fa8ff; } }
+  .status-red { background: var(--red); color: #fff; border-radius: 8px; padding: 6px 8px; margin-top: 4px; }
+  .status-ok { background: var(--green); color: #fff; border-radius: 8px; padding: 6px 8px; margin-top: 4px; }
+  .reminder { background: var(--blue); color: #fff; border-radius: 8px; padding: 6px 8px; margin-bottom: 8px; }
+  .hidden { display: none; }
+  .nav { display: flex; gap: 8px; margin-top: 10px; }
+  .nav button { border: 2px solid var(--gold); background: var(--card); color: var(--ink); border-radius: 999px; padding: 6px 14px; cursor: pointer; font: inherit; }
+  details { border-radius: 10px; margin: 10px 0; padding: 10px 14px; background: var(--paper); border: 2px solid var(--line); }
+  details summary { cursor: pointer; font-weight: 700; }
+  details.k { border-color: var(--red); }
+  ul { margin: 8px 0 0; padding-left: 20px; }
+  li.c { list-style: "☐  "; }
+  .muted { color: var(--muted); }
+  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  @media (max-width: 640px) { .cols { grid-template-columns: 1fr; } }
+  .box { border-radius: 10px; padding: 12px 14px; background: var(--paper); }
+  .box.now { border: 2px solid var(--green); } .box.def { border: 2px solid var(--blue); } .box.non { border: 2px solid var(--red); }
+  .box h3 { margin: 0 0 4px; font-size: 1rem; }
+  footer { margin-top: 28px; font-size: .9rem; }
+  code { font-size: .9em; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="badge">PRD · approved</div>
+    <h1>Salary Check: Product Requirements</h1>
+    <p>A colourful, one-screen budgeting app that answers one question: <b>"Will my money last until my next salary?"</b></p>
+  </header>
+
+  <section>
+    <h2>From scope to detail</h2>
+    <div class="grow">Scope said: <i>"Red warning when the money is running out faster than the days."</i><br>
+    <b>Now we know exactly what that means:</b> the app works out your spending pace since the last reset. If what's left won't cover that pace until your salary date, it turns red and tells you, e.g. <i>"Running low: R500 left, 14 days until salary. At your pace you need about R2,000."</i></div>
+    <div class="grow">Scope said: <i>"Set up once."</i><br>
+    <b>Now we know:</b> salary, salary date, and debit orders stay until <i>you</i> change them. Only purchases clear, and only when you press Reset.</div>
+  </section>
+
+  <section>
+    <h2>The core journey: step through it</h2>
+    <p class="muted">Click a step (or use Back / Next) to see what happens and which part of the screen it uses.</p>
+    <div class="journey" id="journey">
+      <button style="background:#d4a017" data-step="0">1. First open</button>
+      <button style="background:#b8860b" data-step="1">2. Set up</button>
+      <button style="background:#2e8b57" data-step="2">3. Add purchase</button>
+      <button style="background:#c0392b" data-step="3">4. See the answer</button>
+      <button style="background:#6b4f9e" data-step="4">5. Come back</button>
+      <button style="background:#1f3a8a" data-step="5">6. New month</button>
+    </div>
+    <div class="stage">
+      <div>
+        <h3 id="stepTitle" style="margin:0 0 6px"></h3>
+        <p id="stepText" style="margin:0"></p>
+        <ul id="stepChecks"></ul>
+        <div class="nav"><button id="prev">← Back</button><button id="next">Next →</button></div>
+      </div>
+      <div class="phone" aria-label="Sketch of the single screen">
+        <div class="title">✦ Salary Check ✦</div>
+        <div class="reminder hidden" id="remind">Your salary date has arrived. Reset when your salary comes in.</div>
+        <div class="blk" id="b-salary"><span class="lbl">Salary</span> <span class="v">R ____</span> · Monthly ▾ · Date ____</div>
+        <div class="blk" id="b-debit"><span class="lbl">Debit orders</span><br><span class="v">R ____ · Monthly ▾ (×5 rows)</span></div>
+        <div class="blk" id="b-status"><span class="lbl">Status</span><div class="v">Enter your salary and salary date first.</div></div>
+        <div class="blk" id="b-add"><span class="lbl">Add a purchase</span> R ____ · Category ▾ · <b>Add</b></div>
+        <div class="blk" id="b-list"><span class="lbl">This month's purchases</span><div class="v muted">Nothing yet</div></div>
+        <div class="blk" id="b-reset" style="text-align:center"><b>Reset</b></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="kernel">
+    <h2>Features and behaviour (with how we'll know they work)</h2>
+    <details class="k" open>
+      <summary>The salary warning: the heart of the app</summary>
+      <p><b>Left</b> = salary − debit orders − purchases since reset. <b>Pace</b> = spending per day since reset. <b>Red</b> if what's left won't cover your pace until the salary date. Otherwise, a calm "on track" message.</p>
+      <ul><li class="c">R500 left, 14 days to go, fuel about R1,000/week → red, running-low message</li><li class="c">One more purchase that tips the balance turns on track → red right away</li></ul>
+    </details>
+    <details>
+      <summary>Salary and salary date</summary>
+      <p>Amount, monthly/weekly, next salary date. They stay until you change them, e.g. a raise or a new job.</p>
+      <ul><li class="c">Close and reopen: the values are still there</li><li class="c">Changing them updates the status straight away</li></ul>
+    </details>
+    <details>
+      <summary>Debit orders</summary>
+      <p>About five rows: name, amount, monthly/weekly. Never cleared by Reset.</p>
+      <ul><li class="c">They reduce "left" in the status</li><li class="c">Still there after Reset</li></ul>
+    </details>
+    <details>
+      <summary>Adding a purchase</summary>
+      <p>One compact row: amount + category (groceries, electricity, fuel, clothing, other) + Add.</p>
+      <ul><li class="c">"R600, fuel" appears in the list and spent goes up by R600</li><li class="c">The fuel total adds up all fuel purchases</li></ul>
+    </details>
+    <details>
+      <summary>Reset and reminder</summary>
+      <p>Reset clears purchases only. It never resets on its own, because salary can land late after a weekend. From the salary date onward, a reminder appears.</p>
+      <ul><li class="c">After Reset: list empty, spent R0</li><li class="c">On or after salary date: reminder visible</li></ul>
+    </details>
+    <details>
+      <summary>What-ifs (states)</summary>
+      <ul>
+        <li><b>First use:</b> blank boxes with R signs. The status asks for salary and date first.</li>
+        <li><b>No purchases yet:</b> shows left and days to salary, and says to add purchases to see your pace.</li>
+        <li><b>Bad amount</b> (blank, 0, negative, letters): not added, with a friendly note asking for rands.</li>
+        <li><b>Close and reopen:</b> everything is still there. Only Reset clears purchases.</li>
+      </ul>
+    </details>
+  </section>
+
+  <section>
+    <h2>Look and feel</h2>
+    <p><b>Headings:</b> elegant and decorative, "beautiful and patterny," like Klimt's gold. <b>Everything else:</b> clean and simple. <b>Colours:</b> gold, yellow, red, green, starry blue from <i>The Kiss</i>. Rands everywhere. Red is saved for warnings.</p>
+  </section>
+
+  <section>
+    <h2>Assumptions (confirmed by you)</h2>
+    <ul>
+      <li>The status sits between the debit orders and the add-a-purchase row</li>
+      <li>You can delete a purchase if you typed it wrong</li>
+      <li>Reset asks "Are you sure?" first</li>
+      <li>After reset, the app suggests the next salary date (one month or week later), which you can change</li>
+      <li>Weekly debit orders count for each week until the next salary</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Building now vs. later</h2>
+    <div class="cols">
+      <div class="box now"><h3>Building now</h3><ul><li>One screen: salary, debit orders, status, add purchase, list, reset</li><li>Salary warning (red / on track)</li><li>Reset reminder</li><li>Details saved between visits</li><li>Rands + Klimt styling</li></ul></div>
+      <div class="box def"><h3>Deferred</h3><ul><li>Receipt photo scanning</li><li>Junk-food and savings tips</li><li>3-month comparison (green when spending less)</li><li>Sharing with family and friends</li></ul></div>
+      <div class="box non"><h3>Not doing</h3><ul><li>Store price comparisons</li><li>Bank account connection</li><li>Multiple users / logins</li></ul></div>
+    </div>
+  </section>
+
+  <footer class="muted">Companion page for <code>devpost/prd.md</code>. The Markdown file is the official version.</footer>
+</div>
+<script>
+  const steps = [
+    { t: "1. First open", x: "The screen is blank: just empty boxes with the R sign. The status asks you to enter your salary and salary date first.", hl: ["b-salary","b-status"], c: ["Blank boxes with R signs", "Status asks for salary and date"],
+      v: { "b-salary": "R ____ · Monthly ▾ · Date ____", "b-status": "Enter your salary and salary date first.", "b-list": "Nothing yet" } },
+    { t: "2. Set up once", x: "Enter salary, monthly/weekly, and your next salary date. Add your debit orders. These stay until you change them.", hl: ["b-salary","b-debit"], c: ["Values still there after closing and reopening"],
+      v: { "b-salary": "R20,000 · Monthly ▾ · Date 31 Oct", "b-debit": "Car R4,500 · Insurance R900 · Phone R600 …", "b-status": "Left: R12,000 · 16 days to salary. Add purchases to see your pace." } },
+    { t: "3. Add a purchase", x: "In one compact row, type the amount, choose a category, and press Add. Be specific: fuel R600 today, fuel R1,000 next week.", hl: ["b-add","b-list"], c: ["Purchase appears in the list", "Spent goes up by that amount"],
+      v: { "b-add": "R 600 · Fuel ▾ · Add", "b-list": "Fuel R600 · Groceries R2,300 · Clothing R450" } },
+    { t: "4. See the answer", x: "The app compares what's left with your spending pace and the days until salary. If it won't last, it turns red and says why.", hl: ["b-status"], c: ["R500 left, 14 days, fuel about R1,000/week → red", "One tipping purchase flips it to red right away"], red: true,
+      v: { "b-status": "" } },
+    { t: "5. Close and come back", x: "Everything you entered is still there: salary, date, debit orders, and this month's purchases.", hl: ["b-salary","b-debit","b-list"], c: ["Nothing lost after closing the app"], v: {} },
+    { t: "6. New month", x: "On or after your salary date, a reminder appears. Press Reset when your salary actually lands. It never auto-resets, because weekend salaries can arrive on Monday.", hl: ["b-reset"], c: ["Reminder visible from salary date", "After Reset: list empty, spent R0, debit orders kept"], remind: true,
+      v: { "b-list": "Nothing yet", "b-status": "Left: R12,000 · 31 days to salary. Add purchases to see your pace." } }
+  ];
+  let cur = 0;
+  const btns = [...document.querySelectorAll("#journey button")];
+  const base = {};
+  ["b-salary","b-debit","b-status","b-add","b-list"].forEach(id => base[id] = document.querySelector("#" + id + " .v").innerHTML);
+  function show(i) {
+    cur = (i + steps.length) % steps.length;
+    const s = steps[cur];
+    btns.forEach((b, j) => b.classList.toggle("active", j === cur));
+    document.getElementById("stepTitle").textContent = s.t;
+    document.getElementById("stepText").textContent = s.x;
+    document.getElementById("stepChecks").innerHTML = s.c.map(c => '<li class="c">' + c + '</li>').join("");
+    // build cumulative screen values up to this step
+    const vals = Object.assign({}, base);
+    for (let k = 0; k <= cur; k++) Object.assign(vals, steps[k].v);
+    Object.keys(vals).forEach(id => { const el = document.querySelector("#" + id + " .v"); if (el) el.innerHTML = vals[id]; });
+    if (cur >= 3 && cur <= 4) document.querySelector("#b-status .v").innerHTML = '<div class="status-red">Running low: R500 left, 14 days until salary. At your pace you need about R2,000.</div>';
+    document.querySelectorAll(".phone .blk").forEach(b => b.classList.toggle("hl", s.hl.includes(b.id)));
+    document.getElementById("remind").classList.toggle("hidden", !s.remind);
+  }
+  btns.forEach((b, j) => b.addEventListener("click", () => show(j)));
+  document.getElementById("prev").addEventListener("click", () => show(cur - 1));
+  document.getElementById("next").addEventListener("click", () => show(cur + 1));
+  show(0);
+</script>
+</body>
+</html>

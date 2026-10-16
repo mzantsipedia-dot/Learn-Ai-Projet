@@ -1,0 +1,162 @@
+/* Salary Check — colours inspired by Klimt's The Kiss. Red is kept for warnings only. */
+:root {
+  --gold: #d4a017;
+  --yellow: #e8c547;
+  --red: #c0392b;
+  --green: #2e8b57;
+  --blue: #1f3a8a;
+  --cream: #fffaf0;
+  --ink: #2a2118;
+  --card: #ffffff;
+  --line: #eadfc6;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--cream);
+  color: var(--ink);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-size: 17px;
+  line-height: 1.45;
+}
+
+.app {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 16px 16px 40px;
+}
+
+.masthead {
+  background: var(--blue);
+  color: var(--yellow);
+  border-radius: 14px;
+  padding: 18px 16px;
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+h1 {
+  margin: 0;
+  font-family: Georgia, serif;
+  color: var(--gold);
+  letter-spacing: 0.04em;
+  font-size: 2rem;
+}
+
+.tagline { margin: 4px 0 0; color: var(--cream); font-size: 0.95rem; }
+
+h2 {
+  margin: 0 0 12px;
+  font-family: Georgia, serif;
+  color: var(--blue);
+  font-size: 1.2rem;
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-top: 4px solid var(--gold);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.field { display: block; margin-bottom: 12px; }
+.field:last-child { margin-bottom: 0; }
+
+/* Salary: amount, date and frequency share one compact row. */
+.salary-row { display: grid; grid-template-columns: 1.2fr 0.75fr 1.1fr; gap: 8px; }
+.salary-row .field { margin-bottom: 0; }
+.salary-row select { padding-left: 6px; padding-right: 2px; font-size: 0.95rem; }
+#salary-date { text-align: center; padding-left: 4px; padding-right: 4px; }
+.label { display: block; font-size: 0.85rem; color: #6b5d48; margin-bottom: 4px; }
+
+input, select, button {
+  font: inherit;
+  min-height: 46px;
+  border-radius: 8px;
+  border: 1px solid #cdbf9f;
+  background: #fff;
+  color: var(--ink);
+  padding: 8px 10px;
+  width: 100%;
+}
+
+input:focus, select:focus, button:focus-visible {
+  outline: 3px solid var(--yellow);
+  outline-offset: 1px;
+}
+
+.rand-input {
+  display: flex;
+  align-items: center;
+  border: 1px solid #cdbf9f;
+  border-radius: 8px;
+  background: #fff;
+  padding-left: 10px;
+}
+.rand-input > span { font-weight: 600; color: var(--gold); }
+.rand-input input { border: none; padding-left: 6px; }
+.rand-input:focus-within { outline: 3px solid var(--yellow); outline-offset: 1px; }
+.rand-input input:focus { outline: none; }
+
+.add-row { display: grid; grid-template-columns: 1fr 1fr auto; gap: 8px; }
+.add-row .other-name { grid-column: 1 / -1; }
+[hidden] { display: none !important; }
+
+button {
+  background: var(--blue);
+  color: var(--cream);
+  border: none;
+  font-weight: 600;
+  padding: 8px 18px;
+  cursor: pointer;
+  width: auto;
+}
+
+.note { color: var(--red); margin: 8px 0 0; font-size: 0.95rem; }
+
+/* Status card */
+.figures {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin: 0 0 12px;
+}
+.figures div { background: var(--cream); border-radius: 8px; padding: 8px; text-align: center; }
+.figures dt { font-size: 0.8rem; color: #6b5d48; }
+.figures dd { margin: 2px 0 0; font-size: 1.15rem; font-weight: 700; }
+
+.message { margin: 0; padding: 10px 12px; border-radius: 8px; background: var(--cream); }
+
+.status[data-status="on-track"] { border-top-color: var(--green); }
+.status[data-status="on-track"] .message { background: #e6f4ec; color: #1d5e3a; }
+
+.status[data-status="running-low"] { border-top-color: var(--red); border-color: var(--red); }
+.status[data-status="running-low"] .message { background: var(--red); color: #fff; font-weight: 600; }
+.status[data-status="running-low"] #status-left { color: var(--red); }
+
+.status[data-status="salary-day"] .message { background: #fdf3d0; }
+
+/* Purchases list */
+/* Purchases sit side by side as small tags, so a busy month still fits on a phone screen. */
+.purchases {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.purchases li {
+  background: var(--cream);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+.purchases .amount { font-weight: 700; }
+.empty { margin: 0; color: #6b5d48; }

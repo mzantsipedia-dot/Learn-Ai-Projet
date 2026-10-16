@@ -1,0 +1,144 @@
+// Salary Check — screen logic: reads what you type, keeps it, and redraws the status and list.
+(function () {
+  const CATEGORY_NAMES = {
+    groceries: "Groceries",
+    electricity: "Electricity",
+    fuel: "Fuel",
+    clothing: "Clothing",
+    other: "Other",
+  };
+
+  // Everything the app knows. Same shape as the saved data in spec.md > Data Model.
+  const state = {
+    salary: { amount: 0, frequency: "monthly", nextDate: "" },
+    debitOrders: [],
+    purchases: [],
+    cycleStart: null,
+  };
+
+  const el = (id) => document.getElementById(id);
+
+  // Today's date as "YYYY-MM-DD" in the phone's own time zone.
+  function todayText() {
+    const now = new Date();
+    const pad = (n) => String(n).padStart(2, "0");
+    return `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
+  }
+
+  // Turns "R1,200.50", "450" or " 600 " into a number. Anything else gives NaN.
+  function parseAmount(text) {
+    const cleaned = String(text).replace(/[Rr\s,]/g, "");
+    if (!/^\d+(\.\d{1,2})?$/.test(cleaned)) return NaN;
+    return Number(cleaned);
+  }
+
+  function daysWord(n) {
+    return n === 1 ? "1 day" : `${n} days`;
+  }
+
+  function renderStatus() {
+    const s = Calc.summary(state, todayText());
+    const R = Calc.formatRand;
+    const card = el("status");
+    card.dataset.status = s.status;
+
+    const ready = s.status !== "setup";
+    el("status-spent").textContent = ready ? R(s.spent) : "R0";
+    el("status-left").textContent = ready ? R(s.left) : "R0";
+    el("status-days").textContent = ready ? String(Math.max(0, s.daysLeft)) : "–";
+
+    const messages = {
+      setup: "Enter your salary and salary date first.",
+      "salary-day": "Your salary date has arrived. Reset when your salary comes in.",
+      "no-purchases": `${R(s.left)} left, ${daysWord(s.daysLeft)} until salary. Add purchases to see your pace.`,
+      "running-low": `Running low: ${R(s.left)} left, ${daysWord(s.daysLeft)} until salary. At your pace you need about ${R(s.needed)}.`,
+      "on-track": `On track: ${R(s.left)} left, ${daysWord(s.daysLeft)} until salary. At your pace you need about ${R(s.needed)}.`,
+    };
+    el("status-message").textContent = messages[s.status];
+  }
+
+  function renderPurchases() {
+    const list = el("purchase-list");
+    list.innerHTML = "";
+    const newestFirst = [...state.purchases].reverse();
+    for (const p of newestFirst) {
+      const item = document.createElement("li");
+      const name = document.createElement("span");
+      name.textContent = p.category === "other" && p.label ? p.label : CATEGORY_NAMES[p.category] || p.category;
+      const amount = document.createElement("span");
+      amount.className = "amount";
+      amount.textContent = Calc.formatRand(p.amount);
+      item.append(name, " ", amount);
+      list.append(item);
+    }
+    el("purchase-empty").hidden = state.purchases.length > 0;
+  }
+
+  function render() {
+    renderStatus();
+    renderPurchases();
+  }
+
+  // Salary inputs: update the state and redraw on every change.
+  // The date is typed as day/month ("25/10"); the year is worked out for you.
+  function readSalary() {
+    const amount = parseAmount(el("salary-amount").value);
+    state.salary.amount = Number.isNaN(amount) ? 0 : amount;
+    state.salary.frequency = el("salary-frequency").value;
+    const dateText = el("salary-date").value.trim();
+    state.salary.nextDate = Calc.dayMonthToDate(dateText, todayText());
+    el("date-note").hidden = true;
+    render();
+  }
+
+  // Only complain about the date once you've finished typing it.
+  function checkSalaryDate() {
+    const dateText = el("salary-date").value.trim();
+    el("date-note").hidden = dateText === "" || state.salary.nextDate !== "";
+    if (state.salary.nextDate) el("salary-date").value = Calc.formatDayMonth(state.salary.nextDate);
+  }
+
+  el("salary-amount").addEventListener("input", readSalary);
+  el("salary-frequency").addEventListener("change", readSalary);
+  el("salary-date").addEventListener("input", readSalary);
+  el("salary-date").addEventListener("blur", checkSalaryDate);
+
+  // Choosing "Other" opens a small box to type what it was.
+  el("purchase-category").addEventListener("change", () => {
+    const isOther = el("purchase-category").value === "other";
+    el("purchase-other").hidden = !isOther;
+    if (isOther) el("purchase-other").focus();
+  });
+
+  // Add a purchase: only real positive amounts get in.
+  el("add-form").addEventListener("submit", (event) => {
+    event.preventDefault();
+    const input = el("purchase-amount");
+    const amount = parseAmount(input.value);
+    if (Number.isNaN(amount) || amount <= 0) {
+      el("add-note").hidden = false;
+      input.focus();
+      return;
+    }
+    el("add-note").hidden = true;
+    const purchase = {
+      id: "p" + Date.now(),
+      amount,
+      category: el("purchase-category").value,
+      date: todayText(),
+    };
+    const otherName = el("purchase-other").value.trim();
+    if (purchase.category === "other" && otherName) purchase.label = otherName;
+    state.purchases.push(purchase);
+    input.value = "";
+    el("purchase-other").value = "";
+    input.focus();
+    render();
+  });
+
+  el("purchase-amount").addEventListener("input", () => {
+    el("add-note").hidden = true;
+  });
+
+  render();
+})();
