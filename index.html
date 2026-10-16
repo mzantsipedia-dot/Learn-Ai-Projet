@@ -8,6 +8,7 @@
 </head>
 <body>
   <main class="app">
+    <p class="storage-note" id="storage-note" hidden>Your details won't be saved in this browser mode.</p>
     <header class="masthead">
       <h1>Salary Check</h1>
       <p class="tagline">Will my money last until my next salary?</p>
@@ -33,6 +34,13 @@
         </label>
       </div>
       <p class="note" id="date-note" hidden>Please type the date as day/month, like 25/10.</p>
+    </section>
+
+    <section class="card" aria-labelledby="debit-heading">
+      <h2 id="debit-heading">Debit orders</h2>
+      <div class="debit-head" aria-hidden="true"><span>Name</span><span>Amount</span><span>How often</span></div>
+      <div id="debit-rows"></div>
+      <p class="debit-total">Total this salary period: <strong id="debit-total">R0</strong></p>
     </section>
 
     <section class="card status" id="status" aria-live="polite" aria-labelledby="status-heading">

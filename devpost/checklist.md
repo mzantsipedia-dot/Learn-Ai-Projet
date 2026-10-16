@@ -19,7 +19,7 @@ Build mode: learn
   Learner check: Double-click `index.html`. Type your salary and next salary date, then add a few purchases like "R600, Fuel". Watch the status box: does it show what's spent, what's left and the days to go? Keep adding purchases — does it turn red with a "Running low" message when it should? Try typing "abc" as an amount and see what happens.
   Commit: `Add salary entry, purchases, and running-low warning`
 
-- [ ] **2. Debit orders count, and everything is still there when you come back**
+- [x] **2. Debit orders count, and everything is still there when you come back**
   Becomes usable: Five debit-order rows (name, amount, monthly/weekly) reduce what's left. Salary, debit orders and purchases are saved in local storage and come back after closing and reopening the page. If saving is blocked, a small note says so.
   Why now: Debit orders are the last piece of "set up once" and change the kernel's answer, so they belong right after it. Saving is what makes it usable day to day, and it's where the data shape could be wrong — cheap to find now.
   PRD ref: `prd.md > Debit Orders`, `prd.md > The Core Journey` (step 5), `prd.md > States and Boundaries` (what persists)

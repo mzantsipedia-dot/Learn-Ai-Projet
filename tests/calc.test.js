@@ -81,3 +81,24 @@ test("salary date typed as day/month picks the nearest year", () => {
   assert.strictEqual(Calc.dayMonthToDate("abc", "2026-10-15"), "");
   assert.strictEqual(Calc.formatDayMonth("2026-10-05"), "05/10");
 });
+
+test("debit orders reduce what's left, with weekly/monthly conversion", () => {
+  // Monthly salary: monthly orders count once; weekly ones count per week in the period (rounded up).
+  const monthly = stateWith(20000, []);
+  monthly.debitOrders = [
+    { name: "Car", amount: 4500, frequency: "monthly" },
+    { name: "Taxi", amount: 300, frequency: "weekly" }, // 29 Sep → 29 Oct = 30 days → 5 weeks
+    { name: "", amount: 0, frequency: "monthly" },       // empty row ignored
+  ];
+  assert.strictEqual(Calc.debitTotal(monthly), 4500 + 300 * 5);
+  assert.strictEqual(Calc.summary(monthly, TODAY).left, 20000 - 6000);
+
+  // Weekly salary: weekly orders count once; monthly ones as amount × 12 ÷ 52.
+  const weekly = stateWith(5000, []);
+  weekly.salary.frequency = "weekly";
+  weekly.debitOrders = [
+    { name: "Phone", amount: 520, frequency: "monthly" },
+    { name: "Taxi", amount: 300, frequency: "weekly" },
+  ];
+  assert.strictEqual(Calc.debitTotal(weekly), 120 + 300);
+});

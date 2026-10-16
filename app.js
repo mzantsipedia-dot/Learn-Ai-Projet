@@ -8,6 +8,9 @@
     other: "Other",
   };
 
+  const DEBIT_ROWS = 5;
+  const STORAGE_KEY = "salaryCheck.v1";
+
   // Everything the app knows. Same shape as the saved data in spec.md > Data Model.
   const state = {
     salary: { amount: 0, frequency: "monthly", nextDate: "" },
@@ -17,6 +20,37 @@
   };
 
   const el = (id) => document.getElementById(id);
+
+  // Local storage: the browser's sticky note for this app. If the browser blocks it
+  // (e.g. private browsing), the app still works but shows a note that nothing is kept.
+  let canSave = true;
+
+  function load() {
+    try {
+      const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null");
+      if (saved) {
+        Object.assign(state.salary, saved.salary || {});
+        state.debitOrders = Array.isArray(saved.debitOrders) ? saved.debitOrders : [];
+        state.purchases = Array.isArray(saved.purchases) ? saved.purchases : [];
+        state.cycleStart = saved.cycleStart || null;
+      }
+    } catch (error) {
+      canSave = false;
+    }
+    while (state.debitOrders.length < DEBIT_ROWS) {
+      state.debitOrders.push({ name: "", amount: 0, frequency: "monthly" });
+    }
+  }
+
+  function save() {
+    if (!canSave) return;
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    } catch (error) {
+      canSave = false;
+      el("storage-note").hidden = false;
+    }
+  }
 
   // Today's date as "YYYY-MM-DD" in the phone's own time zone.
   function todayText() {
@@ -75,8 +109,53 @@
   }
 
   function render() {
+    el("debit-total").textContent = Calc.formatRand(state.salary.nextDate ? Calc.debitTotal(state) : 0);
     renderStatus();
     renderPurchases();
+    save();
+  }
+
+  // Five debit-order rows: name, amount, monthly/weekly. Built once, then filled from saved data.
+  function buildDebitRows() {
+    const container = el("debit-rows");
+    state.debitOrders.forEach((order, i) => {
+      const row = document.createElement("div");
+      row.className = "debit-row";
+      row.innerHTML = `
+        <input type="text" maxlength="24" autocomplete="off" aria-label="Debit order ${i + 1} name" placeholder="e.g. Car">
+        <span class="rand-input"><span aria-hidden="true">R</span><input type="text" inputmode="decimal" autocomplete="off" aria-label="Debit order ${i + 1} amount"></span>
+        <select aria-label="Debit order ${i + 1} how often">
+          <option value="monthly">Monthly</option>
+          <option value="weekly">Weekly</option>
+        </select>`;
+      const [nameInput, amountInput] = row.querySelectorAll("input");
+      const frequencySelect = row.querySelector("select");
+
+      nameInput.value = order.name || "";
+      amountInput.value = Number(order.amount) > 0 ? order.amount : "";
+      frequencySelect.value = order.frequency || "monthly";
+
+      const update = () => {
+        const amount = parseAmount(amountInput.value);
+        state.debitOrders[i] = {
+          name: nameInput.value.trim(),
+          amount: Number.isNaN(amount) ? 0 : amount,
+          frequency: frequencySelect.value,
+        };
+        render();
+      };
+      nameInput.addEventListener("input", update);
+      amountInput.addEventListener("input", update);
+      frequencySelect.addEventListener("change", update);
+      container.append(row);
+    });
+  }
+
+  // Put saved salary details back into the boxes.
+  function fillSalaryInputs() {
+    if (state.salary.amount > 0) el("salary-amount").value = state.salary.amount;
+    el("salary-frequency").value = state.salary.frequency || "monthly";
+    el("salary-date").value = Calc.formatDayMonth(state.salary.nextDate);
   }
 
   // Salary inputs: update the state and redraw on every change.
@@ -140,5 +219,9 @@
     el("add-note").hidden = true;
   });
 
+  load();
+  el("storage-note").hidden = canSave;
+  buildDebitRows();
+  fillSalaryInputs();
   render();
 })();

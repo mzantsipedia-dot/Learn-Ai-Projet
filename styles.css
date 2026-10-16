@@ -102,6 +102,23 @@ input:focus, select:focus, button:focus-visible {
 .rand-input:focus-within { outline: 3px solid var(--yellow); outline-offset: 1px; }
 .rand-input input:focus { outline: none; }
 
+/* Debit orders: name, amount, how often — one compact row each. */
+.debit-head, .debit-row { display: grid; grid-template-columns: 1.1fr 1fr 1fr; gap: 6px; }
+.debit-head { font-size: 0.8rem; color: #6b5d48; margin-bottom: 4px; }
+.debit-row { margin-bottom: 6px; }
+.debit-row input, .debit-row select { min-height: 42px; font-size: 0.95rem; }
+.debit-row select { padding-left: 6px; padding-right: 2px; }
+.debit-total { margin: 8px 0 0; font-size: 0.95rem; }
+
+.storage-note {
+  background: #fdf3d0;
+  border: 1px solid var(--yellow);
+  border-radius: 8px;
+  padding: 8px 12px;
+  margin: 0 0 12px;
+  font-size: 0.9rem;
+}
+
 .add-row { display: grid; grid-template-columns: 1fr 1fr auto; gap: 8px; }
 .add-row .other-name { grid-column: 1 / -1; }
 [hidden] { display: none !important; }
