@@ -39,7 +39,7 @@ Build mode: learn
   Learner check: Add two fuel purchases and check the fuel total adds up. Delete one with the ✕. Then change your salary date to today — do you see the reminder? Press Reset, say yes, and check the purchases are gone but your salary and debit orders stayed.
   Commit: `Add category totals, delete, and monthly reset`
 
-- [ ] **4. Klimt look and ready for your phone's home screen**
+- [x] **4. Klimt look and ready for your phone's home screen**
   Becomes usable: The decorative "Salary Check" heading in Cinzel Decorative gold on a Klimt-style mosaic band, polished cards and colours, phone-first layout, plus `manifest.webmanifest`, `icon.svg` and a `README.md` so it can be added to a home screen later.
   Why now: The behaviour is all in place, so styling won't be redone by later changes. Your early feedback on slice 1's look feeds straight into this.
   PRD ref: `prd.md > Look and Feel`, `prd.md > Screens and Layout`
@@ -52,7 +52,7 @@ Build mode: learn
 ## Hands-on Checkpoints
 
 - [x] Early usable behavior explored — after slice 1 (the running-low warning), so feedback on the kernel and the look can shape slices 2–4
-- [ ] Final kick-the-tires exploration and feedback completed
+- [x] Final kick-the-tires exploration and feedback completed
 
 ## Final Review
 

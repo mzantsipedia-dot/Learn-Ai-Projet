@@ -1,0 +1,12 @@
+{
+  "name": "Salary Check",
+  "short_name": "Salary Check",
+  "description": "Will my money last until my next salary?",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#fffaf0",
+  "theme_color": "#1f3a8a",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}
