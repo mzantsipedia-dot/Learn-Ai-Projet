@@ -131,9 +131,35 @@
     return `${d}/${m}`;
   }
 
+  // { fuel: 1600, groceries: 2000 } — the month's spending per category.
+  function categoryTotals(purchases) {
+    const totals = {};
+    for (const p of purchases || []) {
+      totals[p.category] = (totals[p.category] || 0) + Number(p.amount);
+    }
+    return totals;
+  }
+
+  // Reset for a new salary period: purchases cleared, the count starts today, and the salary date
+  // moves forward (one period at a time) if it has arrived. Salary and debit orders are kept.
+  function resetCycle(state, today) {
+    let nextDate = state.salary.nextDate;
+    if (nextDate) {
+      while (daysBetween(today, nextDate) <= 0) {
+        nextDate = nextSalaryDate(nextDate, state.salary.frequency);
+      }
+    }
+    return {
+      ...state,
+      salary: { ...state.salary, nextDate },
+      purchases: [],
+      cycleStart: today,
+    };
+  }
+
   const api = {
     daysBetween, addPeriod, nextSalaryDate, cycleStart, debitTotal, summary, formatRand,
-    dayMonthToDate, formatDayMonth,
+    dayMonthToDate, formatDayMonth, categoryTotals, resetCycle,
   };
 
   if (typeof module !== "undefined" && module.exports) {

@@ -72,8 +72,22 @@
 
     <section class="card" aria-labelledby="list-heading">
       <h2 id="list-heading">This month's purchases</h2>
+      <ul class="totals" id="category-totals" aria-label="Total per category"></ul>
       <ul class="purchases" id="purchase-list"></ul>
       <p class="empty" id="purchase-empty">No purchases yet.</p>
+    </section>
+
+    <section class="card reset-card" aria-labelledby="reset-heading">
+      <h2 id="reset-heading">New month</h2>
+      <p class="reset-help">When your salary comes in, press Reset. It clears this month's purchases and keeps your salary and debit orders.</p>
+      <button type="button" id="reset-button" class="reset-button">Reset</button>
+      <div class="reset-confirm" id="reset-confirm" hidden>
+        <p>Are you sure? This clears this month's purchases. Your salary and debit orders stay.</p>
+        <div class="reset-actions">
+          <button type="button" id="reset-yes" class="reset-button">Yes, reset</button>
+          <button type="button" id="reset-cancel" class="secondary">Cancel</button>
+        </div>
+      </div>
     </section>
   </main>
 

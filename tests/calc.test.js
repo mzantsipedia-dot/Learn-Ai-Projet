@@ -102,3 +102,34 @@ test("debit orders reduce what's left, with weekly/monthly conversion", () => {
   ];
   assert.strictEqual(Calc.debitTotal(weekly), 120 + 300);
 });
+
+test("category totals add up each category", () => {
+  const totals = Calc.categoryTotals([
+    { amount: 600, category: "fuel" },
+    { amount: 1000, category: "fuel" },
+    { amount: 2000, category: "groceries" },
+  ]);
+  assert.deepStrictEqual(totals, { fuel: 1600, groceries: 2000 });
+});
+
+test("reset clears purchases only, starts the count today, and moves the salary date forward", () => {
+  const state = stateWith(20000, [{ amount: 600, category: "fuel" }]);
+  state.salary.nextDate = "2026-10-25";
+  state.debitOrders = [{ name: "Car", amount: 4500, frequency: "monthly" }];
+  const after = Calc.resetCycle(state, "2026-10-27"); // salary landed late, reset two days after
+  assert.deepStrictEqual(after.purchases, []);
+  assert.strictEqual(after.cycleStart, "2026-10-27");
+  assert.strictEqual(after.salary.nextDate, "2026-11-25");
+  assert.strictEqual(after.salary.amount, 20000);
+  assert.strictEqual(after.debitOrders.length, 1);
+
+  // After reset, "days gone" counts from the reset day, and spent is back to R0.
+  const s = Calc.summary(after, "2026-10-27");
+  assert.strictEqual(s.spent, 0);
+  assert.strictEqual(s.daysLeft, 29);
+});
+
+test("reset before the salary date keeps the date", () => {
+  const state = stateWith(20000, []);
+  assert.strictEqual(Calc.resetCycle(state, TODAY).salary.nextDate, "2026-10-29");
+});

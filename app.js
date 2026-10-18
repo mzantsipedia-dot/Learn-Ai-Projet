@@ -83,7 +83,7 @@
 
     const messages = {
       setup: "Enter your salary and salary date first.",
-      "salary-day": "Your salary date has arrived. Reset when your salary comes in.",
+      "salary-day": "Your salary date has arrived. Reset when your salary comes in (button at the bottom).",
       "no-purchases": `${R(s.left)} left, ${daysWord(s.daysLeft)} until salary. Add purchases to see your pace.`,
       "running-low": `Running low: ${R(s.left)} left, ${daysWord(s.daysLeft)} until salary. At your pace you need about ${R(s.needed)}.`,
       "on-track": `On track: ${R(s.left)} left, ${daysWord(s.daysLeft)} until salary. At your pace you need about ${R(s.needed)}.`,
@@ -97,16 +97,57 @@
     const newestFirst = [...state.purchases].reverse();
     for (const p of newestFirst) {
       const item = document.createElement("li");
+      const label = p.category === "other" && p.label ? p.label : CATEGORY_NAMES[p.category] || p.category;
       const name = document.createElement("span");
-      name.textContent = p.category === "other" && p.label ? p.label : CATEGORY_NAMES[p.category] || p.category;
+      name.textContent = label;
       const amount = document.createElement("span");
       amount.className = "amount";
       amount.textContent = Calc.formatRand(p.amount);
-      item.append(name, " ", amount);
+      const remove = document.createElement("button");
+      remove.type = "button";
+      remove.className = "remove";
+      remove.textContent = "✕";
+      remove.setAttribute("aria-label", `Delete ${label} ${Calc.formatRand(p.amount)}`);
+      remove.addEventListener("click", () => {
+        state.purchases = state.purchases.filter((other) => other.id !== p.id);
+        render();
+      });
+      item.append(name, " ", amount, remove);
       list.append(item);
     }
     el("purchase-empty").hidden = state.purchases.length > 0;
+
+    // Totals per category, biggest first.
+    const totalsList = el("category-totals");
+    totalsList.innerHTML = "";
+    const totals = Object.entries(Calc.categoryTotals(state.purchases)).sort((a, b) => b[1] - a[1]);
+    for (const [category, total] of totals) {
+      const item = document.createElement("li");
+      item.innerHTML = `<span></span> <strong></strong>`;
+      item.querySelector("span").textContent = CATEGORY_NAMES[category] || category;
+      item.querySelector("strong").textContent = Calc.formatRand(total);
+      totalsList.append(item);
+    }
+    totalsList.hidden = totals.length === 0;
   }
+
+  // Reset: only when you say so, because salary can land late (e.g. a weekend salary paid on Monday).
+  // The "Are you sure?" question is part of the page, not a browser pop-up,
+  // because some browsers and home-screen apps silently block pop-ups.
+  function showResetConfirm(show) {
+    el("reset-button").hidden = show;
+    el("reset-confirm").hidden = !show;
+    if (show) el("reset-yes").focus();
+  }
+
+  el("reset-button").addEventListener("click", () => showResetConfirm(true));
+  el("reset-cancel").addEventListener("click", () => showResetConfirm(false));
+  el("reset-yes").addEventListener("click", () => {
+    Object.assign(state, Calc.resetCycle(state, todayText()));
+    el("salary-date").value = Calc.formatDayMonth(state.salary.nextDate);
+    showResetConfirm(false);
+    render();
+  });
 
   function render() {
     el("debit-total").textContent = Calc.formatRand(state.salary.nextDate ? Calc.debitTotal(state) : 0);
@@ -201,7 +242,7 @@
     }
     el("add-note").hidden = true;
     const purchase = {
-      id: "p" + Date.now(),
+      id: "p" + Date.now() + Math.floor(Math.random() * 1000),
       amount,
       category: el("purchase-category").value,
       date: todayText(),

@@ -29,7 +29,7 @@ Build mode: learn
   Learner check: Add two of your real debit orders (e.g. car, insurance) and watch "left" go down. Then close the browser tab completely, double-click `index.html` again, and check your salary, debit orders and purchases are all still there.
   Commit: `Add debit orders and save details between visits`
 
-- [ ] **3. Manage the month: category totals, delete a mistake, and Reset**
+- [x] **3. Manage the month: category totals, delete a mistake, and Reset**
   Becomes usable: The purchases list shows newest first with a ✕ to delete, plus a total per category. From the salary date onward a reminder appears; Reset asks "Are you sure?", clears purchases only, starts the count from today, and suggests the next salary date (still editable).
   Why now: Depends on saved purchases from slice 2. It completes the full month cycle in the core journey, so after this the whole journey can be tried end to end.
   PRD ref: `prd.md > Adding a Purchase` (category totals), `prd.md > Reset and Reminder`, `prd.md > The Core Journey` (step 6), `prd.md > Product Decisions` (assumptions)
@@ -76,3 +76,4 @@ Activity mode:
 - "Other" purchases get a small box to type what they were (stored as `label`) — learner feedback at the slice 1 checkpoint.
 - Purchases list shown as compact side-by-side tags instead of one tall row each — learner feedback at the slice 1 checkpoint: a busy month would make the list far too long.
 - Running-low rule kept as planned (pace-based, no fixed R3,000 line) — the learner considered a R3,000 threshold and chose to keep the original kernel.
+- Reset's "Are you sure?" is shown on the page (Yes, reset / Cancel) instead of a browser pop-up — the build found that some browsers, including the app's preview pane, silently block pop-ups, so Reset appeared to do nothing.
