@@ -2,3 +2,9 @@
 .env
 .env.*
 !.env.example
+
+# Hackathon guide instructions (not part of the app)
+/.agents/
+/agent/
+/.claude/
+/skills-lock.json

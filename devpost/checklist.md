@@ -70,7 +70,7 @@ Activity and evidence: Guided code route following "Add a purchase" from screen 
 Route and stops: `index.html` (`id="add-form"`) → `app.js` (submit handler: `parseAmount`, `state.purchases.push`, `render`/`save`) → `calc.js` (`summary`, `status = "running-low"`).
 Edit outcome: Offered (change the `tagline` text). Declined.
 Reflection: Transfer question offered.
-Activity mode: Live app in the browser pane plus the file pane in the editor. Map: `devpost/app-map.html`, from commit 4ccd29c.
+Activity mode: Live app in the browser pane plus the file pane in the editor. Map: `devpost/app-map.html`, from commit 7a23f37.
 
 ## Revisions
 
