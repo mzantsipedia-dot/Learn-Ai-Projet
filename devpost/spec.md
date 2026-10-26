@@ -43,6 +43,7 @@ PRD ref: `prd.md > The Core Journey`.
 - **Demo video:** record either the phone or the computer browser in phone view. Show: set salary and date → add debit orders → add purchases → status turns red → Reset reminder and Reset.
 - **Submission needs** a short demo video and a public GitHub repository. The Pages link is a bonus, not a replacement.
 - **Public GitHub repository:** https://github.com/mzantsipedia-dot/Learn-Ai-Projet (branch `main`).
+- **Live phone link (GitHub Pages):** https://mzantsipedia-dot.github.io/Learn-Ai-Projet/
 
 ## Look and Feel
 From `prd.md > Look and Feel` and `scope.md > Inspiration & Identity`.
