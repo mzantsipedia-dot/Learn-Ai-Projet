@@ -56,19 +56,21 @@ Build mode: learn
 
 ## Final Review
 
-- [ ] Final review complete — feedback resolved and learner confirms ready to ship
+Findings: learner explored the full journey at phone size (salary, debit orders, purchases, delete, Reset, Klimt look) and reported everything working. Earlier fix during slice 3 (on-page Reset confirmation) was retried and confirmed. Raised: the localhost address doesn't open on a phone. Explained as expected (localhost is this computer only); the phone link comes from GitHub Pages in `6-ship`. Considered: the status can turn red right after Reset if one big purchase is made on day one (pace judged from a single day). Learner chose to keep it as is. No further revisions requested.
+
+- [x] Final review complete — feedback resolved and learner confirms ready to ship
 
 ## Code Tour and App Map
 
-- [ ] Learning activity complete — guided route, focused alternative, prior practice connected, or brief recap
-- [ ] Optional edit and transfer reflection addressed — offered/declined/already covered/not applicable as appropriate
-- [ ] `devpost/app-map.html` generated from finished code, checked, and shown, including a project-grounded practice to reuse
+- [x] Learning activity complete — guided route, focused alternative, prior practice connected, or brief recap
+- [x] Optional edit and transfer reflection addressed — offered/declined/already covered/not applicable as appropriate
+- [x] `devpost/app-map.html` generated from finished code, checked, and shown, including a project-grounded practice to reuse
 
-Activity and evidence:
-Route and stops:
-Edit outcome:
-Reflection:
-Activity mode:
+Activity and evidence: Guided code route following "Add a purchase" from screen to maths, tied to the learner's goal of seeing how working with an agent goes step by step. The learner reviewed the stops and reported understanding where things live. Takeaway connected to the Reset bug found by hands-on testing (see Revisions).
+Route and stops: `index.html` (`id="add-form"`) → `app.js` (submit handler: `parseAmount`, `state.purchases.push`, `render`/`save`) → `calc.js` (`summary`, `status = "running-low"`).
+Edit outcome: Offered (change the `tagline` text). Declined.
+Reflection: Transfer question offered.
+Activity mode: Live app in the browser pane plus the file pane in the editor. Map: `devpost/app-map.html`, from commit 4ccd29c.
 
 ## Revisions
 

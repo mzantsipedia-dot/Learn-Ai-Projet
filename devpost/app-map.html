@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Salary Check App Map</title>
+<style>
+  :root {
+    --bg: #fffaf0; --card: #ffffff; --ink: #2a2118; --muted: #6b5d48; --line: #eadfc6;
+    --gold: #b8860b; --blue: #1f3a8a; --red: #c0392b; --green: #2e8b57; --code: #f6efe0;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #141a2e; --card: #1c2440; --ink: #f3ead6; --muted: #b9ad94; --line: #33406a;
+      --gold: #e8c547; --blue: #9fb4ff; --red: #ff7a6b; --green: #6fd19b; --code: #232d50;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.55 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  main { max-width: 760px; margin: 0 auto; padding: 24px 16px 48px; }
+  h1 { font-family: Georgia, serif; color: var(--gold); margin: 0 0 4px; font-size: 1.9rem; }
+  h2 { font-family: Georgia, serif; color: var(--blue); font-size: 1.25rem; margin: 32px 0 10px; }
+  .sub { color: var(--muted); margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-top: 4px solid var(--gold); border-radius: 10px; padding: 14px 16px; margin: 12px 0; }
+  code { background: var(--code); border-radius: 4px; padding: 1px 5px; font-size: 0.92em; }
+  ol, ul { padding-left: 22px; }
+  li { margin: 6px 0; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+  th, td { text-align: left; padding: 8px 6px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { color: var(--muted); font-weight: 600; }
+  details { margin-top: 8px; }
+  summary { cursor: pointer; color: var(--blue); font-weight: 600; }
+  summary:focus-visible, a:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+  pre { background: var(--code); border-radius: 8px; padding: 10px 12px; overflow-x: auto; font-size: 0.88rem; }
+  svg { width: 100%; height: auto; display: block; }
+  .svg-box { fill: var(--card); stroke: var(--line); stroke-width: 2; }
+  .svg-key { fill: var(--card); stroke: var(--gold); stroke-width: 2.5; }
+  .svg-title { fill: var(--blue); font: 700 15px Georgia, serif; }
+  .svg-text { fill: var(--ink); font: 13px system-ui, sans-serif; }
+  .svg-muted { fill: var(--muted); font: 12px system-ui, sans-serif; }
+  .svg-arrow { stroke: var(--gold); stroke-width: 2.5; fill: none; }
+  .svg-head { fill: var(--gold); }
+  .foot { color: var(--muted); font-size: 0.9rem; margin-top: 32px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Salary Check: App Map</h1>
+  <p class="sub">A one-page guide to how the app is put together and where to look when you want to change something.</p>
+
+  <h2>What the app is</h2>
+  <div class="card">
+    <p style="margin-top:0">One phone-friendly web page that answers <strong>"Will my money last until my next salary?"</strong> You enter your salary, salary date and debit orders, then add purchases as you spend. The status box compares what's left with your spending pace and the days until salary, and turns <span style="color:var(--red);font-weight:600">red</span> when the money won't last.</p>
+    <p style="margin-bottom:0">It's made of a few plain files with no framework. Everything you type is saved in the browser's <strong>local storage</strong> (a sticky note for this app on that device). Nothing is sent to the internet.</p>
+  </div>
+
+  <h2>One action, end to end: pressing "Add"</h2>
+  <svg viewBox="0 0 720 300" role="img" aria-labelledby="flow-title flow-desc">
+    <title id="flow-title">What happens when you add a purchase</title>
+    <desc id="flow-desc">The Add a purchase form in index.html sends the amount to the submit handler in app.js, which checks it, stores it, and calls render. Render asks summary in calc.js for the answer, saves to local storage, and redraws the status box.</desc>
+    <defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="svg-head"/></marker></defs>
+    <rect x="10" y="20" width="210" height="110" rx="10" class="svg-box"/>
+    <text x="24" y="48" class="svg-title">1. index.html</text>
+    <text x="24" y="72" class="svg-text">"Add a purchase" row</text>
+    <text x="24" y="92" class="svg-muted">form id="add-form"</text>
+    <text x="24" y="112" class="svg-muted">You type R450, Groceries</text>
+
+    <rect x="255" y="20" width="210" height="110" rx="10" class="svg-key"/>
+    <text x="269" y="48" class="svg-title">2. app.js</text>
+    <text x="269" y="72" class="svg-text">Submit handler</text>
+    <text x="269" y="92" class="svg-muted">parseAmount → purchases.push</text>
+    <text x="269" y="112" class="svg-muted">→ render()</text>
+
+    <rect x="500" y="20" width="210" height="110" rx="10" class="svg-key"/>
+    <text x="514" y="48" class="svg-title">3. calc.js</text>
+    <text x="514" y="72" class="svg-text">summary(state, today)</text>
+    <text x="514" y="92" class="svg-muted">left, pace, needed</text>
+    <text x="514" y="112" class="svg-muted">→ on-track / running-low</text>
+
+    <rect x="140" y="190" width="210" height="90" rx="10" class="svg-box"/>
+    <text x="154" y="218" class="svg-title">Local storage</text>
+    <text x="154" y="242" class="svg-muted">save() under "salaryCheck.v1"</text>
+    <text x="154" y="262" class="svg-muted">load() puts it back next visit</text>
+
+    <rect x="390" y="190" width="210" height="90" rx="10" class="svg-box"/>
+    <text x="404" y="218" class="svg-title">What you see</text>
+    <text x="404" y="242" class="svg-muted">renderStatus(): spent, left,</text>
+    <text x="404" y="262" class="svg-muted">days, and green or red message</text>
+
+    <path d="M220 75 H250" class="svg-arrow" marker-end="url(#arrow)"/>
+    <path d="M465 75 H495" class="svg-arrow" marker-end="url(#arrow)"/>
+    <path d="M330 130 L270 185" class="svg-arrow" marker-end="url(#arrow)"/>
+    <path d="M605 130 L520 185" class="svg-arrow" marker-end="url(#arrow)"/>
+  </svg>
+
+  <h2>The route through the code</h2>
+  <p>This is the route followed in the guided code tour (no edit was made).</p>
+  <ol>
+    <li><strong><code>index.html</code>, search <code>id="add-form"</code></strong>: the amount box (<code>purchase-amount</code>), category dropdown and Add button. This file only describes the screen; it does no maths.</li>
+    <li><strong><code>app.js</code>, search <code>addEventListener("submit"</code></strong>: runs when you press Add. <code>parseAmount</code> rejects blank, zero, negative or non-number amounts with a friendly note; <code>state.purchases.push(purchase)</code> adds it; <code>render()</code> redraws everything and calls <code>save()</code>.</li>
+    <li><strong><code>calc.js</code>, search <code>function summary</code></strong>: works out spent, left, pace per day and what you'll need until salary. The lines that set <code>status = "running-low"</code> are the exact moment the app decides to turn red.</li>
+  </ol>
+  <details>
+    <summary>Show the warning rule from calc.js</summary>
+<pre><code>const left = salaryAmount - debitTotal(state) - spent;
+const pacePerDay = spent / daysGone;
+const needed = roundTo50(pacePerDay * Math.max(0, daysLeft));
+
+if (daysLeft &lt;= 0) status = "salary-day";
+else if (left &lt; 0) status = "running-low";
+else if (spent === 0) status = "no-purchases";
+else if (left &lt; needed) status = "running-low";
+else status = "on-track";</code></pre>
+  </details>
+
+  <h2>To change this, start here</h2>
+  <table>
+    <thead><tr><th>If you want to change…</th><th>Start in</th></tr></thead>
+    <tbody>
+      <tr><td>Any words on the screen, e.g. the line under the heading</td><td><code>index.html</code>, search <code>tagline</code></td></tr>
+      <tr><td>The categories in the dropdown</td><td><code>index.html</code> (<code>purchase-category</code>) and <code>CATEGORY_NAMES</code> in <code>app.js</code></td></tr>
+      <tr><td>When the status turns red, or how pace is worked out</td><td><code>summary</code> in <code>calc.js</code>, then update <code>tests/calc.test.js</code></td></tr>
+      <tr><td>The status messages ("Running low: …")</td><td><code>renderStatus</code> in <code>app.js</code></td></tr>
+      <tr><td>What Reset clears or how the next salary date moves</td><td><code>resetCycle</code> in <code>calc.js</code>; the buttons are wired near <code>showResetConfirm</code> in <code>app.js</code></td></tr>
+      <tr><td>How debit orders are counted (weekly vs monthly)</td><td><code>debitTotal</code> in <code>calc.js</code></td></tr>
+      <tr><td>Colours, the mosaic heading, layout</td><td><code>styles.css</code>: colours at the top under <code>:root</code>, heading under <code>.masthead</code></td></tr>
+      <tr><td>What gets saved, or the saving key</td><td><code>load</code> and <code>save</code> in <code>app.js</code></td></tr>
+    </tbody>
+  </table>
+
+  <h2>A practice to reuse</h2>
+  <div class="card">
+    <p style="margin-top:0"><strong>What happened:</strong> after slice 3, the automatic checks passed and the agent's browser test said Reset worked. But when it was tried by hand, Reset did nothing. The test had answered the "Are you sure?" pop-up in code, so it never saw that the browser was quietly blocking the pop-up. Testing again by clicking the real buttons confirmed the fix, which moved the question onto the page (<code>reset-confirm</code> in <code>index.html</code>). It's recorded under <em>Revisions</em> in <code>devpost/checklist.md</code>.</p>
+    <p style="margin-bottom:0"><strong>Reuse it:</strong> when an agent says something "works", ask <em>how</em> it was checked, and still try the real thing yourself the way a user would. The plan made this easy: every slice in the checklist had a plain-language <em>Learner check</em>, so a human try-out was built into each step. On your next project, write down "what I should see when I try it" for each step before building, and treat a hands-on try as part of "done".</p>
+  </div>
+
+  <h2>Run it again</h2>
+  <ul>
+    <li><strong>Simplest:</strong> double-click <code>index.html</code> to open it in Chrome or Edge.</li>
+    <li><strong>On a phone:</strong> once published with GitHub Pages, open the link and tap <em>Add to Home Screen</em>. See <code>README.md</code>.</li>
+    <li><strong>Check the maths:</strong> run <code>node --test</code> in the project folder.</li>
+  </ul>
+
+  <p class="foot">Made from the finished code at commit <code>4ccd29c</code>. This is a snapshot, so it can drift from the code if the app changes later.</p>
+</main>
+</body>
+</html>
