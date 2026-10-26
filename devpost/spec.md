@@ -42,6 +42,7 @@ PRD ref: `prd.md > The Core Journey`.
 - **On a phone (optional deployment, chosen by the learner):** push the project to a **public** GitHub repository. Turn on GitHub Pages under Settings → Pages → "Deploy from a branch" → `main`, folder `/ (root)`. Open `https://<username>.github.io/<repo-name>/` on the phone, then tap Add to Home Screen. `6-ship` handles this.
 - **Demo video:** record either the phone or the computer browser in phone view. Show: set salary and date → add debit orders → add purchases → status turns red → Reset reminder and Reset.
 - **Submission needs** a short demo video and a public GitHub repository. The Pages link is a bonus, not a replacement.
+- **Public GitHub repository:** https://github.com/mzantsipedia-dot/Learn-Ai-Projet (branch `main`).
 
 ## Look and Feel
 From `prd.md > Look and Feel` and `scope.md > Inspiration & Identity`.
